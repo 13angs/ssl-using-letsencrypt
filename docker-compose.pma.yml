@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  pma:
+    image: phpmyadmin:latest
+    container_name: pma
+    restart: always
+    networks:
+      - ssl-network
+
+    environment:
+      - PMA_ARBITRARY=1
+      - VIRTUAL_HOST=${PHPMYADMIN_HOST}
+      - LETSENCRYPT_HOST=${PHPMYADMIN_HOST}
+
+networks:
+  ssl-network:
+    external: true
+    name: ssl-network
