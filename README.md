@@ -2,22 +2,36 @@
 
 make sure to read the comment inside `docker-compose.yml` to further understand the example
 
-## Start the services
+## Run the nginx-proxy and acme-companion services
 
-- run the nginx-proxy and acme-companion service
+- jwilder/nginx-proxy sets up a container running nginx and docker-gen. docker-gen generates reverse proxy configs for nginx and reloads nginx when containers are started and stopped.
+- The nginxproxy/acme-companion will handle the automated creation, renewal and use of SSL certificates for proxied Docker containers through the ACME protocol
+
+to start first create a network used in the `docker-compose.yml` file
+
+```bash
+docker network create ssl-network
+```
+
+start the services
 
 ```bash
 docker compose up -d
 ```
 
-## Secure the proxied containers
+## Start securing the container
 
-container listen on and expose port 80
-1. make sure the service use the same network as nginx-proxy
-2. change the `VIRTUAL_HOST` and `LETSENCRYPT_HOST` to your own domain
+for container listen on and expose port 80
 
-as for container listen on and expose another port than the default 80 you need to use `VIRTUAL_PORT` and set it your own port to force nginx-proxy to use the port
+```bash
+docker compose -f docker-compose.pma.yml up -d
+```
 
+for container listen on and expose another port than the default 80
+
+```bash
+docker compose -f docker-compose.pt.yml up -d
+```
 
 ## Reference:
 1. https://hub.docker.com/r/nginxproxy/acme-companion

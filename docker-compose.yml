@@ -55,7 +55,7 @@ services:
     # so that Let's Encrypt can warn you about expiring certificates 
     # and allow you to recover your account.
     environment:
-      - DEFAULT_EMAIL=winonafeminine.dev2021@gmail.com
+      - DEFAULT_EMAIL=${EMAIL}
 
     # make to use the same network as nginx-proxy
     networks:
@@ -76,4 +76,5 @@ volumes:
 
 networks:
   ssl-network:
+    external: true
     name: ssl-network

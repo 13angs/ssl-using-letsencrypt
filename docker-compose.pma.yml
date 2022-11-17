@@ -1,13 +1,20 @@
 version: '3.8'
 
+# for container listen on and expose port 80
+# The example using the phpmyadmin as the image expose the port 80
 services:
   pma:
     image: phpmyadmin:latest
     container_name: pma
     restart: always
+
+    # make sure the service use the same network as nginx-proxy
     networks:
       - ssl-network
 
+    # rename the .env.sample file to .env
+    # change the `VIRTUAL_HOST` and `LETSENCRYPT_HOST` to your own domain
+    # PHPMYADMIN_HOST=<your_own_domain_here>
     environment:
       - PMA_ARBITRARY=1
       - VIRTUAL_HOST=${PHPMYADMIN_HOST}

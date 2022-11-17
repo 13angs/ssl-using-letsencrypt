@@ -1,18 +1,39 @@
 version: '3.8'
 
+# for container listen on and expose port 80
+# The example using the phpmyadmin as the image expose the port 80
 services:
   portainer:
     image: portainer/portainer-ce:2.14.2
     container_name: portainer
     restart: always
 
+    # rename the .env.sample file to .env
+    # change the `VIRTUAL_HOST` and `LETSENCRYPT_HOST` to your own domain
+    # PHPMYADMIN_HOST=<your_own_domain_here>
+    # change `VIRTUAL_PORT` to your container port
+    # VIRTUAL_PORT=<expose_port>
     environment:
       - VIRTUAL_HOST=${PORTAINER_HOST}
       - LETSENCRYPT_HOST=${PORTAINER_HOST}
-      - VIRTUAL_PORT=9000
+      - VIRTUAL_PORT=${PT_VIRTUAL_PORT}
+    
+    # save and persist the portainer data
+    # bind the docker socket
+    volumes:
+      - type: volume
+        source: pt_data
+        target: /data
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
 
     networks:
       - ssl-network
+
+volumes:
+  pt_data:
+    name: pt_data
 
 networks:
   ssl-network:
